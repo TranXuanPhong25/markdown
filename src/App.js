@@ -1,23 +1,53 @@
-import logo from './logo.svg';
-import './App.css';
+import { useEffect, useRef, useState } from "react";
+import ToolBar from "./toolbar/toolbar"
+import { marked } from "marked"
+import DOMPurify from "dompurify"
+marked.setOptions({
+  renderer: new marked.Renderer(),
+  // highlight: function (code, lang) {
+  //   const hljs = require('highlight');
+  //   const language = hljs.getLanguage(lang) ? lang : 'plaintext';
+  //   return hljs.highlight(code, { language }).value;
+  // },
+  "baseUrl": null,
+  "breaks": false,
+  "extensions": null,
+  "gfm": true,
+  "headerIds": true,
+  "headerPrefix": "",
+  "highlight": null,
+  "langPrefix": "language-",
+  "mangle": true,
+  "pedantic": false,
+  "sanitize": false,
+  "sanitizer": null,
+  "silent": false,
+  "smartLists": false,
+  "smartypants": false,
+  "tokenizer": null,
+  "walkTokens": null,
+  "xhtml": false
+});
 
 function App() {
+  const [textInput, setTextInput] = useState("")
+  function handleInput(e) {
+    setTextInput(e.target.value)
+  }
+  const preview = useRef()
+  useEffect(() => {
+    // console.log()
+
+    preview.current.innerHTML = DOMPurify.sanitize(marked.parse(textInput), { USE_PROFILES: { html: true } })
+  }, [textInput])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <div className="tools">
+        <ToolBar />
+      </div>
+      <textarea value={textInput} onChange={handleInput} autoFocus></textarea>
+      <div id="divider"></div>
+      <div ref={preview} className="preview"></div>
     </div>
   );
 }
