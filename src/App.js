@@ -4,11 +4,6 @@ import { marked } from "marked"
 import DOMPurify from "dompurify"
 marked.setOptions({
   renderer: new marked.Renderer(),
-  // highlight: function (code, lang) {
-  //   const hljs = require('highlight');
-  //   const language = hljs.getLanguage(lang) ? lang : 'plaintext';
-  //   return hljs.highlight(code, { language }).value;
-  // },
   "baseUrl": null,
   "breaks": false,
   "extensions": null,
